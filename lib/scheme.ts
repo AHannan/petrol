@@ -16,6 +16,55 @@ export const PROVINCES = [
 
 export type ProvinceCode = (typeof PROVINCES)[number]["code"];
 
+/**
+ * The SMS is identical for every vehicle; the type only decides the monthly
+ * quota and which plate shape we show as an example. Motorcycles are by far
+ * the largest eligible group, so they lead.
+ */
+export const VEHICLES = [
+  { id: "bike", en: "Motorcycle", ur: "موٹر سائیکل", litres: 20 },
+  { id: "rickshaw", en: "Rickshaw", ur: "رکشہ", litres: 20 },
+  { id: "car", en: "Car up to 800cc", ur: "۸۰۰ سی سی تک گاڑی", litres: 30 },
+] as const;
+
+export type VehicleId = (typeof VEHICLES)[number]["id"];
+
+/**
+ * Plate shapes per province, from the provincial excise formats. Bikes carry
+ * four digits in Punjab and Sindh but three in KP and Islamabad, which is why
+ * a single car-shaped example misleads most users of this scheme.
+ */
+const PLATE_SHAPES: Record<"bike" | "car", Record<ProvinceCode, string>> = {
+  bike: {
+    P: "LEB-1234",
+    S: "ABC-1234",
+    K: "AB-123",
+    B: "AB-1234",
+    I: "AB-123",
+    A: "ABCD-123",
+    G: "ABC-12",
+  },
+  car: {
+    P: "LEA-123",
+    S: "ABC-123",
+    K: "AB-123",
+    B: "AB-1234",
+    I: "AB-123",
+    A: "ABCD-123",
+    G: "ABC-12",
+  },
+};
+
+export function plateExample(vehicle: VehicleId, province: string): string {
+  // Rickshaws are plated like the other small vehicles in each province.
+  const table = PLATE_SHAPES[vehicle === "car" ? "car" : "bike"];
+  return table[province as ProvinceCode] ?? (vehicle === "car" ? "ABC-123" : "ABC-1234");
+}
+
+export function litresFor(vehicle: VehicleId): number {
+  return VEHICLES.find((v) => v.id === vehicle)?.litres ?? 20;
+}
+
 /** Urdu keyboards produce Arabic-Indic digits; 9771 only understands ASCII. */
 export function toAsciiDigits(value: string): string {
   return value
@@ -71,19 +120,46 @@ export function isValidDate(value: string): boolean {
   );
 }
 
+/** The native date input speaks ISO; the SMS and the typed field speak DDMMYYYY. */
+export function toIsoDate(value: string): string {
+  const d = dateDigits(value);
+  if (!isValidDate(d)) return "";
+  return `${d.slice(4, 8)}-${d.slice(2, 4)}-${d.slice(0, 2)}`;
+}
+
+export function fromIsoDate(iso: string): string {
+  const match = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? `${match[3]}${match[2]}${match[1]}` : "";
+}
+
 export type Registration = {
+  vehicle: VehicleId;
   cnic: string;
   plate: string;
   province: string;
   date: string;
 };
 
+/**
+ * Guidance on dashes conflicts: most sources say to send the plate with no
+ * dashes, one says to copy the registration book character for character.
+ * Plain is the default and the UI offers the dashed form as a second try.
+ */
+export type PlateStyle = "plain" | "dashed";
+
+export function plateForMessage(plate: string, style: PlateStyle): string {
+  const bare = normalisePlate(plate).replace(/-/g, "");
+  if (style === "plain") return bare;
+  const split = bare.match(/^([A-Z]+)(\d+)$/);
+  return split ? `${split[1]}-${split[2]}` : bare;
+}
+
 /** REG <CNIC> <PLATE> <PROVINCE> <DDMMYYYY> */
-export function buildRegMessage(reg: Registration): string {
+export function buildRegMessage(reg: Registration, style: PlateStyle = "plain"): string {
   return [
     "REG",
     cnicDigits(reg.cnic),
-    normalisePlate(reg.plate),
+    plateForMessage(reg.plate, style),
     reg.province,
     dateDigits(reg.date),
   ].join(" ");

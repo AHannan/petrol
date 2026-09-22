@@ -1,24 +1,37 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import DetailsForm from "@/components/DetailsForm";
 import { Benefits, Disclaimer, Rules, Troubleshooting } from "@/components/InfoSections";
 import MessageCard from "@/components/MessageCard";
-import RegisterForm from "@/components/RegisterForm";
 import TokenPanel from "@/components/TokenPanel";
 import { dictionaries, LANGUAGES, type Lang } from "@/lib/i18n";
-import { buildRegMessage, TOKEN_MESSAGE, type Registration } from "@/lib/scheme";
+import {
+  buildRegMessage,
+  plateForMessage,
+  TOKEN_MESSAGE,
+  type PlateStyle,
+  type Registration,
+} from "@/lib/scheme";
 import { detectApple } from "@/lib/sms";
 import { validate, type Field as FieldName } from "@/lib/validate";
 
 const STORAGE_KEY = "petrol-relief:v1";
-const EMPTY: Registration = { cnic: "", plate: "", province: "", date: "" };
+const EMPTY: Registration = {
+  vehicle: "bike",
+  cnic: "",
+  plate: "",
+  province: "",
+  date: "",
+};
 
-type Step = "register" | "token";
+type Step = "details" | "token";
 
 export default function Helper() {
   const [lang, setLang] = useState<Lang>("en");
-  const [step, setStep] = useState<Step>("register");
+  const [step, setStep] = useState<Step>("details");
   const [reg, setReg] = useState<Registration>(EMPTY);
+  const [plateStyle, setPlateStyle] = useState<PlateStyle>("plain");
   const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({});
   const [isApple, setIsApple] = useState(false);
 
@@ -54,7 +67,11 @@ export default function Helper() {
 
   const errors = useMemo(() => validate(reg), [reg]);
   const ready = Object.keys(errors).length === 0;
-  const message = ready ? buildRegMessage(reg) : "";
+  const message = ready ? buildRegMessage(reg, plateStyle) : "";
+
+  // Only worth offering when the two spellings actually differ.
+  const hasAlt =
+    ready && plateForMessage(reg.plate, "plain") !== plateForMessage(reg.plate, "dashed");
 
   function update(patch: Partial<Registration>) {
     setReg((current) => ({ ...current, ...patch }));
@@ -63,6 +80,7 @@ export default function Helper() {
   function clearSaved() {
     setReg(EMPTY);
     setTouched({});
+    setPlateStyle("plain");
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -87,8 +105,16 @@ export default function Helper() {
         </button>
       </header>
 
-      <div role="tablist" aria-label={t.appName} className="grid grid-cols-2 gap-1 rounded-xl bg-surface-muted p-1">
-        {(["register", "token"] as const).map((key) => (
+      <p className="rounded-xl border border-brand-line bg-brand-soft px-3.5 py-2.5 text-xs leading-relaxed font-medium text-brand">
+        {t.facilitator}
+      </p>
+
+      <div
+        role="tablist"
+        aria-label={t.appName}
+        className="grid grid-cols-2 gap-1 rounded-xl bg-surface-muted p-1"
+      >
+        {(["details", "token"] as const).map((key) => (
           <button
             key={key}
             role="tab"
@@ -96,19 +122,17 @@ export default function Helper() {
             aria-selected={step === key}
             onClick={() => setStep(key)}
             className={`h-11 rounded-lg px-2 text-sm font-semibold transition ${
-              step === key
-                ? "bg-surface text-foreground shadow-sm"
-                : "text-muted hover:text-foreground"
+              step === key ? "bg-surface text-foreground shadow-sm" : "text-muted hover:text-foreground"
             }`}
           >
-            {key === "register" ? t.stepRegister : t.stepToken}
+            {key === "details" ? t.stepDetails : t.stepToken}
           </button>
         ))}
       </div>
 
-      {step === "register" ? (
+      {step === "details" ? (
         <>
-          <RegisterForm
+          <DetailsForm
             t={t}
             lang={lang}
             value={reg}
@@ -117,7 +141,20 @@ export default function Helper() {
             onChange={update}
             onBlur={(field) => setTouched((current) => ({ ...current, [field]: true }))}
           />
-          <MessageCard t={t} message={message} ready={ready} isApple={isApple} />
+          <MessageCard
+            t={t}
+            message={message}
+            ready={ready}
+            isApple={isApple}
+            alt={
+              hasAlt
+                ? {
+                    label: plateStyle === "plain" ? t.altDashed : t.altPlain,
+                    onClick: () => setPlateStyle(plateStyle === "plain" ? "dashed" : "plain"),
+                  }
+                : undefined
+            }
+          />
           <p className="px-1 text-xs leading-relaxed text-muted">{t.savedNote}</p>
           <Benefits t={t} />
           <Rules t={t} />

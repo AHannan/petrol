@@ -4,24 +4,32 @@ export type Lang = (typeof LANGUAGES)[number];
 const en = {
   dir: "ltr",
   appName: "Petrol Relief Helper",
-  tagline: "Fill the form once — we write the exact 9771 message for you.",
+  tagline: "Fill the form once and we write the exact 9771 message for you.",
+  facilitator: "Nothing is sent, submitted or saved here — you send the SMS yourself.",
   langSwitch: "اردو",
 
-  stepRegister: "1. Register",
-  stepToken: "2. Get token",
+  stepDetails: "1. Sign-up message",
+  stepToken: "2. Token message",
 
-  registerHeading: "Register your vehicle",
-  registerIntro:
-    "Send this message from the SIM that is registered in your own name.",
+  detailsHeading: "Your vehicle details",
+  detailsIntro:
+    "We only write the message. You send it yourself, from the SIM registered in your own name.",
+
+  vehicleLabel: "Vehicle type",
+  quota20: "Rs 100 off a litre, up to 20 litres a month",
+  quota30: "Rs 100 off a litre, up to 30 litres a month",
 
   cnicLabel: "CNIC number",
   cnicHint: "13 digits from your ID card",
   plateLabel: "Vehicle number plate",
-  plateHint: "Exactly as printed on your registration book",
+  plateHintBike:
+    "Copy it exactly from the registration book. Bike numbers carry four digits in Punjab and Sindh, three in KP and Islamabad.",
+  plateHintCar: "Copy it exactly from the registration book.",
   provinceLabel: "Province of registration",
   provincePlaceholder: "Choose province",
   dateLabel: "Vehicle registration date",
-  dateHint: "Day / Month / Year, as on the registration book",
+  dateHint: "Type it, or tap the calendar. Day / Month / Year.",
+  calendarLabel: "Pick the date from a calendar",
 
   messageHeading: "Your message",
   sendTo: "To",
@@ -33,17 +41,17 @@ const en = {
   incomplete: "Fill the form above to get your message.",
   smsHelp:
     "The SMS app opens with the message already written. You still have to press send.",
+  altDashed: "Not accepted? Try it with the dash",
+  altPlain: "Not accepted? Try it without the dash",
 
   tokenHeading: "Get your fuel token",
   tokenIntro:
-    "Once 9771 confirms your registration, send TOK to get a 10-digit token. Show it at the pump before filling.",
+    "Once 9771 confirms your sign-up, send TOK to get a 10-digit token. Show it at the pump before filling.",
   tokenValidity: "A token is valid for 10 days. Expired? Just send TOK again.",
-  tokenReminder:
-    "Not registered yet? Do step 1 first and wait for the confirmation SMS.",
+  tokenReminder: "Not signed up yet? Do step 1 first and wait for the confirmation SMS.",
 
   clear: "Clear saved details",
-  cleared: "Details cleared",
-  savedNote: "Your details are saved on this phone only, so you need not retype them.",
+  savedNote: "Your details are kept on this phone only, so you need not retype them.",
 
   benefitsHeading: "What you get",
   benefit1: "Rs 100 off every litre of petrol",
@@ -52,41 +60,50 @@ const en = {
 
   rulesHeading: "Before you send",
   rule1: "Use a SIM registered in your own name — a borrowed number is rejected.",
-  rule2: "One CNIC can register one vehicle, and one vehicle one CNIC.",
+  rule2: "One CNIC can sign up one vehicle, and one vehicle one CNIC.",
   rule3: "Details must match the excise record exactly, letter for letter.",
-  rule4: "Registration and token messages to 9771 are free of charge.",
+  rule4: "Sign-up and token messages to 9771 are free of charge.",
 
   troubleHeading: "If 9771 does not reply",
   trouble1:
     "The service has been busy since launch. Wait a while and send the same message again — do not keep changing your details.",
   trouble2:
-    "If it says your vehicle was not found, try the plate without the dash (LEB123 instead of LEB-123).",
+    "If it says your vehicle was not found, use the link under the message to swap the dash in and out of your number.",
   trouble3: "Check that the province letter matches where the vehicle is registered.",
 
   disclaimer:
-    "This is an unofficial helper. It sends nothing on your behalf and keeps nothing on any server — your details stay on this phone. Official details:",
+    "This is an unofficial helper. It has no server, collects nothing, and sends nothing on your behalf — your details stay on this phone. Official details:",
 } as const;
 
 const ur: Record<keyof typeof en, string> = {
   dir: "rtl",
   appName: "پٹرول ریلیف مددگار",
-  tagline: "ایک بار فارم بھریں — ہم 9771 کے لیے بالکل درست پیغام لکھ دیں گے۔",
+  tagline: "ایک بار فارم بھریں، ہم 9771 کے لیے بالکل درست پیغام لکھ دیں گے۔",
+  facilitator: "یہاں کچھ بھیجا، جمع یا محفوظ نہیں کیا جاتا — ایس ایم ایس آپ نے خود بھیجنا ہے۔",
   langSwitch: "English",
 
-  stepRegister: "۱۔ رجسٹریشن",
-  stepToken: "۲۔ ٹوکن لیں",
+  stepDetails: "۱۔ اندراج کا پیغام",
+  stepToken: "۲۔ ٹوکن کا پیغام",
 
-  registerHeading: "اپنی گاڑی رجسٹر کریں",
-  registerIntro: "یہ پیغام اُسی سم سے بھیجیں جو آپ کے اپنے نام پر رجسٹرڈ ہے۔",
+  detailsHeading: "آپ کی گاڑی کی تفصیلات",
+  detailsIntro:
+    "ہم صرف پیغام لکھ کر دیتے ہیں۔ بھیجنا آپ نے خود ہے، اُسی سم سے جو آپ کے نام پر رجسٹرڈ ہے۔",
+
+  vehicleLabel: "گاڑی کی قسم",
+  quota20: "فی لیٹر ۱۰۰ روپے رعایت، مہینے میں ۲۰ لیٹر تک",
+  quota30: "فی لیٹر ۱۰۰ روپے رعایت، مہینے میں ۳۰ لیٹر تک",
 
   cnicLabel: "شناختی کارڈ نمبر",
   cnicHint: "شناختی کارڈ کے ۱۳ ہندسے",
   plateLabel: "گاڑی کا نمبر",
-  plateHint: "بالکل ویسا ہی جیسا رجسٹریشن بک پر لکھا ہے",
+  plateHintBike:
+    "رجسٹریشن بک سے بالکل ویسا ہی لکھیں۔ پنجاب اور سندھ میں موٹر سائیکل کے نمبر چار ہندسوں کے، خیبر پختونخوا اور اسلام آباد میں تین ہندسوں کے ہوتے ہیں۔",
+  plateHintCar: "رجسٹریشن بک سے بالکل ویسا ہی لکھیں۔",
   provinceLabel: "رجسٹریشن کا صوبہ",
   provincePlaceholder: "صوبہ منتخب کریں",
   dateLabel: "گاڑی کی رجسٹریشن کی تاریخ",
-  dateHint: "دن / مہینہ / سال، جیسا رجسٹریشن بک پر درج ہے",
+  dateHint: "خود لکھیں یا کیلنڈر پر ٹیپ کریں۔ دن / مہینہ / سال۔",
+  calendarLabel: "کیلنڈر سے تاریخ منتخب کریں",
 
   messageHeading: "آپ کا پیغام",
   sendTo: "نمبر",
@@ -98,16 +115,16 @@ const ur: Record<keyof typeof en, string> = {
   incomplete: "پیغام حاصل کرنے کے لیے اوپر فارم مکمل کریں۔",
   smsHelp:
     "ایس ایم ایس ایپ کھلے گی اور پیغام پہلے سے لکھا ہوا ہو گا۔ بھیجنے کا بٹن آپ کو دبانا ہے۔",
+  altDashed: "قبول نہ ہو؟ ڈیش کے ساتھ آزمائیں",
+  altPlain: "قبول نہ ہو؟ ڈیش کے بغیر آزمائیں",
 
   tokenHeading: "اپنا فیول ٹوکن حاصل کریں",
   tokenIntro:
-    "جب 9771 سے رجسٹریشن کی تصدیق آ جائے تو TOK بھیجیں اور ۱۰ ہندسوں کا ٹوکن حاصل کریں۔ پٹرول ڈلوانے سے پہلے پمپ پر دکھائیں۔",
+    "جب 9771 سے اندراج کی تصدیق آ جائے تو TOK بھیجیں اور ۱۰ ہندسوں کا ٹوکن حاصل کریں۔ پٹرول ڈلوانے سے پہلے پمپ پر دکھائیں۔",
   tokenValidity: "ٹوکن ۱۰ دن کے لیے کارآمد ہے۔ میعاد ختم ہو جائے تو دوبارہ TOK بھیج دیں۔",
-  tokenReminder:
-    "ابھی رجسٹریشن نہیں ہوئی؟ پہلے مرحلہ ۱ مکمل کریں اور تصدیقی پیغام کا انتظار کریں۔",
+  tokenReminder: "ابھی اندراج نہیں ہوا؟ پہلے مرحلہ ۱ مکمل کریں اور تصدیقی پیغام کا انتظار کریں۔",
 
   clear: "محفوظ معلومات مٹا دیں",
-  cleared: "معلومات مٹا دی گئیں",
   savedNote: "آپ کی معلومات صرف اسی فون میں محفوظ ہیں، تاکہ بار بار لکھنا نہ پڑے۔",
 
   benefitsHeading: "آپ کو کیا ملے گا",
@@ -119,17 +136,17 @@ const ur: Record<keyof typeof en, string> = {
   rule1: "سم آپ کے اپنے نام پر ہونی چاہیے — کسی اور کا نمبر قبول نہیں ہوتا۔",
   rule2: "ایک شناختی کارڈ پر ایک گاڑی، اور ایک گاڑی پر ایک ہی شناختی کارڈ۔",
   rule3: "تمام تفصیلات ایکسائز ریکارڈ کے عین مطابق، حرف بہ حرف درست ہوں۔",
-  rule4: "9771 پر رجسٹریشن اور ٹوکن کے پیغامات بالکل مفت ہیں۔",
+  rule4: "9771 پر اندراج اور ٹوکن کے پیغامات بالکل مفت ہیں۔",
 
   troubleHeading: "اگر 9771 سے جواب نہ آئے",
   trouble1:
     "شروع دن سے سسٹم پر رش ہے۔ کچھ دیر بعد وہی پیغام دوبارہ بھیجیں — اپنی تفصیلات بار بار نہ بدلیں۔",
   trouble2:
-    "اگر گاڑی نہ ملنے کا پیغام آئے تو نمبر بغیر ڈیش کے آزمائیں (LEB-123 کے بجائے LEB123)۔",
+    "اگر گاڑی نہ ملنے کا پیغام آئے تو پیغام کے نیچے دیے گئے لنک سے نمبر میں ڈیش لگا کر یا ہٹا کر آزمائیں۔",
   trouble3: "صوبے کا حرف وہی ہو جہاں گاڑی رجسٹرڈ ہے، اس کی تصدیق کر لیں۔",
 
   disclaimer:
-    "یہ غیر سرکاری مددگار صفحہ ہے۔ یہ آپ کی طرف سے کوئی پیغام نہیں بھیجتا اور کوئی معلومات کسی سرور پر محفوظ نہیں کرتا — تفصیلات صرف آپ کے فون میں رہتی ہیں۔ سرکاری معلومات:",
+    "یہ غیر سرکاری مددگار صفحہ ہے۔ اس کا کوئی سرور نہیں، یہ کوئی معلومات جمع نہیں کرتا اور آپ کی طرف سے کچھ نہیں بھیجتا — تفصیلات صرف آپ کے فون میں رہتی ہیں۔ سرکاری معلومات:",
 };
 
 export const errors = {
@@ -138,7 +155,10 @@ export const errors = {
   plateRequired: { en: "Enter your vehicle number", ur: "گاڑی کا نمبر درج کریں" },
   provinceRequired: { en: "Choose a province", ur: "صوبہ منتخب کریں" },
   dateRequired: { en: "Enter the registration date", ur: "رجسٹریشن کی تاریخ درج کریں" },
-  dateInvalid: { en: "Enter a real date, e.g. 01/01/2015", ur: "درست تاریخ درج کریں، مثلاً ۰۱/۰۱/۲۰۱۵" },
+  dateInvalid: {
+    en: "Enter a real date, e.g. 01/01/2015",
+    ur: "درست تاریخ درج کریں، مثلاً ۰۱/۰۱/۲۰۱۵",
+  },
 } as const;
 
 export type ErrorKey = keyof typeof errors;

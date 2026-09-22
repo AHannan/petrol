@@ -1,31 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f7f4;
-  --surface: #ffffff;
-  --surface-muted: #f1f5f2;
-  --foreground: #10241a;
-  --muted: #5b6b62;
-  --border: #dfe7e1;
-  --brand: #087445;
-  --brand-strong: #05623a;
-  --brand-soft: #e4f3ea;
-  --danger: #b42318;
-}
+  color-scheme: light;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b1210;
-    --surface: #121b17;
-    --surface-muted: #16211c;
-    --foreground: #e8efea;
-    --muted: #9bada3;
-    --border: #22302a;
-    --brand: #2ea36a;
-    --brand-strong: #38b578;
-    --brand-soft: #14291f;
-    --danger: #ff8a7a;
-  }
+  --background: #f5faf7;
+  --surface: #ffffff;
+  --surface-muted: #f1f7f3;
+  --foreground: #1a2c24;
+  --muted: #62766b;
+  --border: #e4eee8;
+
+  /* Deep enough to carry white button text at AA contrast (5.4:1). */
+  --brand: #0e7a4a;
+  --brand-strong: #0a6640;
+  --brand-soft: #e8f6ee;
+  --brand-line: #cbe7d8;
+  --danger: #b42318;
 }
 
 @theme inline {
@@ -38,6 +28,7 @@
   --color-brand: var(--brand);
   --color-brand-strong: var(--brand-strong);
   --color-brand-soft: var(--brand-soft);
+  --color-brand-line: var(--brand-line);
   --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -70,6 +61,12 @@ html[lang="ur"] button {
 .latin-field {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   line-height: 1.4;
+}
+
+/* The native date input is layered over the calendar button, so hide its own. */
+.date-overlay::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {

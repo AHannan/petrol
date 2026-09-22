@@ -21,10 +21,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4f7f4" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b1210" },
-  ],
+  themeColor: "#f5faf7",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -34,7 +31,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       dir="ltr"
       className={`${geistSans.variable} ${geistMono.variable} ${urdu.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      {/*
+        Extensions commonly stamp attributes onto <body> before React hydrates
+        (isolation: isolate, and similar). This silences the mismatch for this
+        element's own attributes only; mismatches inside the app still report.
+      */}
+      <body suppressHydrationWarning className="min-h-full flex flex-col">
+        {children}
+      </body>
     </html>
   );
 }

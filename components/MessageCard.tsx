@@ -10,9 +10,11 @@ type Props = {
   message: string;
   ready: boolean;
   isApple: boolean;
+  /** Offers the other plate spelling when 9771 rejects the first one. */
+  alt?: { label: string; onClick: () => void };
 };
 
-export default function MessageCard({ t, message, ready, isApple }: Props) {
+export default function MessageCard({ t, message, ready, isApple, alt }: Props) {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -78,6 +80,16 @@ export default function MessageCard({ t, message, ready, isApple }: Props) {
           {status === "copied" ? t.copied : t.copy}
         </button>
       </div>
+
+      {alt && ready && (
+        <button
+          type="button"
+          onClick={alt.onClick}
+          className="mt-3 w-full rounded-lg py-1 text-xs font-semibold text-brand underline underline-offset-2"
+        >
+          {alt.label}
+        </button>
+      )}
 
       <p aria-live="polite" className="mt-3 text-xs leading-relaxed text-muted">
         {status === "failed" ? t.copyFailed : t.smsHelp}
