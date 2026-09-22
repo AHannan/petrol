@@ -25,17 +25,20 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  /*
+    Extensions stamp attributes onto <html> and <body> before React hydrates
+    (data-headlessui-focus-visible, isolation: isolate, and similar), and the
+    language toggle later sets lang/dir here itself. suppressHydrationWarning
+    covers each element's own attributes only, one level deep, so mismatches
+    inside the app still report normally.
+  */
   return (
     <html
-      lang="en"
-      dir="ltr"
+      suppressHydrationWarning
+      lang="ur"
+      dir="rtl"
       className={`${geistSans.variable} ${geistMono.variable} ${urdu.variable} h-full antialiased`}
     >
-      {/*
-        Extensions commonly stamp attributes onto <body> before React hydrates
-        (isolation: isolate, and similar). This silences the mismatch for this
-        element's own attributes only; mismatches inside the app still report.
-      */}
       <body suppressHydrationWarning className="min-h-full flex flex-col">
         {children}
       </body>

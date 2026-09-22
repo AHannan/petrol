@@ -28,7 +28,8 @@ const EMPTY: Registration = {
 type Step = "details" | "token";
 
 export default function Helper() {
-  const [lang, setLang] = useState<Lang>("en");
+  // Urdu leads; a saved preference overrides it after mount.
+  const [lang, setLang] = useState<Lang>("ur");
   const [step, setStep] = useState<Step>("details");
   const [reg, setReg] = useState<Registration>(EMPTY);
   const [plateStyle, setPlateStyle] = useState<PlateStyle>("plain");
